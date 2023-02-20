@@ -1,17 +1,21 @@
 import { useQuery } from "@tanstack/react-query"
+import { githubApi } from '../../api/githubApi';
+import { Label } from "../interfaces/label";
 
 export const LabelPicker = () => {
 
-  const getLabel = async() =>{
-    const res = await fetch('https://api.github.com/repos/facebook/react/labels');
-    const data= res.json();
-    console.log(data);
+  const getLabel = async():Promise<Label[]> =>{
+    const { data } = await githubApi.get<Label[]>('labels');
     return data; 
   }
 
   const laberQuery = useQuery(
     ['labels'],
     getLabel,
+    {
+      refetchOnWindowFocus: false
+    }
+
   )
 
 
